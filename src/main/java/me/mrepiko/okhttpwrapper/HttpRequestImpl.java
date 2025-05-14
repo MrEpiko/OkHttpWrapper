@@ -50,7 +50,7 @@ public final class HttpRequestImpl implements HttpRequest, Closeable {
     @Getter @Nullable private final Map<String, String> params;
     @Nullable private final OkHttpClient client;
 
-    HttpRequestImpl(HttpRequestBuilder builder) {
+    HttpRequestImpl(@NonNull HttpRequestBuilder builder) {
         this.url = builder.getUrl();
         this.method = builder.getMethod();
         this.body = builder.getBody();
@@ -127,6 +127,7 @@ public final class HttpRequestImpl implements HttpRequest, Closeable {
         });
     }
 
+    @NonNull
     private Call getCall() {
         Request.Builder builder = new Request.Builder();
         setupMethodAndBody(builder);
@@ -137,7 +138,8 @@ public final class HttpRequestImpl implements HttpRequest, Closeable {
         return getClient().newCall(request);
     }
 
-    private HttpResponse getResponse(Response response) throws IOException {
+    @NonNull
+    private HttpResponse getResponse(@NonNull Response response) throws IOException {
         this.response = response;
         String responseBody = (response.body() == null) ? null : response.body().string();
         return new HttpResponse(response.code(), responseBody, getHeaders(response.headers()));
@@ -176,6 +178,7 @@ public final class HttpRequestImpl implements HttpRequest, Closeable {
         headers.forEach(builder::addHeader);
     }
 
+    @NonNull
     private RequestBody getRequestBody() {
         return RequestBody.create(Objects.requireNonNullElse(body, ""), getBodyMediaType());
     }
