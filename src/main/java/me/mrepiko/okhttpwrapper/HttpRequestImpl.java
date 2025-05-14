@@ -60,6 +60,8 @@ public final class HttpRequestImpl implements HttpRequest, Closeable {
         this.client = builder.getClient();
     }
 
+    // Method implementations
+
     @Override
     @NonNull
     public OkHttpClient getClient() {
@@ -79,18 +81,18 @@ public final class HttpRequestImpl implements HttpRequest, Closeable {
         return (bodyMediaType != null) ? bodyMediaType : DefaultHttpRequestConfig.getDefaultMediaType();
     }
 
+    @Nullable
+    @Override
+    public Response getRawResponse() {
+        return response;
+    }
+
     @Override
     @NonNull
     public HttpResponse execute() throws IOException {
         Call call = getCall();
         response = call.execute();
         return getResponse(response);
-    }
-
-    @Nullable
-    @Override
-    public Response getRawResponse() {
-        return response;
     }
 
     @Override
@@ -126,6 +128,15 @@ public final class HttpRequestImpl implements HttpRequest, Closeable {
             else consumer.accept(resp);
         });
     }
+
+    @Override
+    public void close() {
+        if (response == null) return;
+        response.close();
+        response = null;
+    }
+
+    // Helper methods
 
     @NonNull
     private Call getCall() {
@@ -191,10 +202,4 @@ public final class HttpRequestImpl implements HttpRequest, Closeable {
         return headersMap;
     }
 
-    @Override
-    public void close() {
-        if (response == null) return;
-        response.close();
-        response = null;
-    }
 }
