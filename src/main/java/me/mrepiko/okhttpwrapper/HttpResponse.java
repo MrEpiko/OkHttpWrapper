@@ -19,12 +19,10 @@ package me.mrepiko.okhttpwrapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 
-@Getter
 public record HttpResponse(int statusCode, @Nullable String body, @Nullable HashMap<String, String> headers) {
 
     private static final Gson gson = new Gson();

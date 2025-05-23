@@ -17,8 +17,7 @@ _Coming soon..._
 ## 🚀 Quick Example
 
 ```java
-HttpRequest request = HttpRequestBuilder.create("https://api.example.com/data")
-    .setMethod(HttpMethod.GET)
+HttpRequest request = HttpRequestBuilder.create("https://api.example.com/data", HttpMethod.GET)
     .addHeader("Authorization", "Bearer token")
     .addParam("limit", "10")
     .build();

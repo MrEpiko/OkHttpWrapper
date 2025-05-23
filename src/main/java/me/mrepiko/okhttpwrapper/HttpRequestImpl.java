@@ -25,7 +25,6 @@ import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -35,7 +34,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public final class HttpRequestImpl implements HttpRequest, Closeable {
+public final class HttpRequestImpl implements HttpRequest {
 
     private static final Gson gson = new Gson();
 
@@ -170,7 +169,10 @@ public final class HttpRequestImpl implements HttpRequest, Closeable {
     }
 
     private void setupParams(@NonNull Request.Builder builder) {
-        if (params == null) return;
+        if (params == null) {
+            builder.url(url);
+            return;
+        }
 
         StringBuilder urlBuilder = new StringBuilder(url);
         urlBuilder.append("?");

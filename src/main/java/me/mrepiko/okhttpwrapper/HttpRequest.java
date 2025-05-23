@@ -23,11 +23,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Closeable;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public interface HttpRequest {
+public interface HttpRequest extends Closeable {
     @NonNull
     HttpMethod getMethod();
     @NonNull
