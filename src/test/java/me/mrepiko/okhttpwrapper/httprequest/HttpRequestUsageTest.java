@@ -18,7 +18,6 @@ package me.mrepiko.okhttpwrapper.httprequest;
 
 import me.mrepiko.okhttpwrapper.HttpMethod;
 import me.mrepiko.okhttpwrapper.HttpRequest;
-import me.mrepiko.okhttpwrapper.HttpRequestBuilder;
 import me.mrepiko.okhttpwrapper.HttpResponse;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -57,7 +56,7 @@ class HttpRequestUsageTest {
 
         String url = mockServer.url("/data").toString();
 
-        HttpRequest request = HttpRequestBuilder.create(url, HttpMethod.GET)
+        HttpRequest request = HttpRequest.Builder.create(url, HttpMethod.GET)
                 .addHeader("Authorization", "Bearer token")
                 .addParam("limit", "10")
                 .build();
@@ -73,10 +72,10 @@ class HttpRequestUsageTest {
         assertEquals("/data?limit=10", recordedRequest.getPath());
         assertEquals("Bearer token", recordedRequest.getHeader("Authorization"));
 
-        assertEquals(200, response.statusCode());
-        assertEquals(expectedBody, response.body());
-        assertNotNull(response.headers());
-        assertEquals("application/json", response.headers().get("Content-Type"));
+        assertEquals(200, response.getStatusCode());
+        assertEquals(expectedBody, response.getBody());
+        assertNotNull(response.getHeaders());
+        assertEquals("application/json", response.getHeaders().get("Content-Type"));
     }
 
     @Test
@@ -86,14 +85,14 @@ class HttpRequestUsageTest {
         String url = mockServer.url("/submit").toString();
 
         String jsonBody = "{\"name\":\"test\"}";
-        HttpRequest request = HttpRequestBuilder.create(url, HttpMethod.POST)
+        HttpRequest request = HttpRequest.Builder.create(url, HttpMethod.POST)
                 .setBody(jsonBody)
                 .setBodyMediaType("application/json; charset=utf-8")
                 .build();
 
         try (request) {
             HttpResponse response = request.execute();
-            assertEquals(201, response.statusCode());
+            assertEquals(201, response.getStatusCode());
         }
 
         RecordedRequest recordedRequest = mockServer.takeRequest();
@@ -108,13 +107,13 @@ class HttpRequestUsageTest {
 
         String url = mockServer.url("/default").toString();
 
-        HttpRequest request = HttpRequestBuilder.create(url, HttpMethod.POST)
+        HttpRequest request = HttpRequest.Builder.create(url, HttpMethod.POST)
                 .setBody("test")
                 .build();
 
         try (request) {
             HttpResponse response = request.execute();
-            assertEquals(200, response.statusCode());
+            assertEquals(200, response.getStatusCode());
         }
     }
 
@@ -124,7 +123,7 @@ class HttpRequestUsageTest {
 
         String url = mockServer.url("/async").toString();
 
-        HttpRequest request = HttpRequestBuilder.create(url, HttpMethod.GET).build();
+        HttpRequest request = HttpRequest.Builder.create(url, HttpMethod.GET).build();
 
         HttpResponse[] result = new HttpResponse[1];
         try (request) {
@@ -133,13 +132,13 @@ class HttpRequestUsageTest {
         }
 
         assertNotNull(result[0]);
-        assertEquals(200, result[0].statusCode());
-        assertEquals("async", result[0].body());
+        assertEquals(200, result[0].getStatusCode());
+        assertEquals("async", result[0].getBody());
     }
 
     @Test
     void testInvalidMediaTypeThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> HttpRequestBuilder.create("https://localhost", HttpMethod.POST)
+        assertThrows(IllegalArgumentException.class, () -> HttpRequest.Builder.create("https://localhost", HttpMethod.POST)
                 .setBodyMediaType("invalid_type")
                 .build());
     }
@@ -152,13 +151,13 @@ class HttpRequestUsageTest {
 
         String url = mockServer.url("/headers").toString();
 
-        HttpRequest request = HttpRequestBuilder.create(url, HttpMethod.GET).build();
+        HttpRequest request = HttpRequest.Builder.create(url, HttpMethod.GET).build();
         HttpResponse response;
         try (request) {
             response = request.execute();
         }
 
-        Map<String, String> headers = response.headers();
+        Map<String, String> headers = response.getHeaders();
         assertNotNull(headers);
         assertEquals("true", headers.get("X-Test"));
     }

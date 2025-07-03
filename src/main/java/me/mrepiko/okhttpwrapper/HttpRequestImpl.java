@@ -49,7 +49,7 @@ public final class HttpRequestImpl implements HttpRequest {
     @Getter @Nullable private final Map<String, String> params;
     @Nullable private final OkHttpClient client;
 
-    HttpRequestImpl(@NonNull HttpRequestBuilder builder) {
+    HttpRequestImpl(@NonNull Builder builder) {
         this.url = builder.getUrl();
         this.method = builder.getMethod();
         this.body = builder.getBody();
