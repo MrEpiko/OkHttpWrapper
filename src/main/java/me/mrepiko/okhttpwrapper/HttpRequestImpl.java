@@ -16,9 +16,12 @@ limitations under the License.
 
 package me.mrepiko.okhttpwrapper;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ContainerNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.NonNull;
 import okhttp3.*;
@@ -36,7 +39,7 @@ import java.util.function.Consumer;
 
 public final class HttpRequestImpl implements HttpRequest {
 
-    private static final Gson gson = new Gson();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Nullable private Response response;
 
@@ -69,9 +72,9 @@ public final class HttpRequestImpl implements HttpRequest {
 
     @Override
     @Nullable
-    public JsonObject getBodyAsJsonObject() throws JsonSyntaxException {
+    public JsonNode getBodyAsNode() throws JsonProcessingException {
         if (body == null) return null;
-        return gson.fromJson(body, JsonObject.class);
+        return mapper.readTree(body);
     }
 
     @Override

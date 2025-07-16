@@ -16,9 +16,9 @@ limitations under the License.
 
 package me.mrepiko.okhttpwrapper;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
@@ -32,12 +32,12 @@ public class HttpResponse {
     private final int statusCode;
     @Nullable private final String body;
     @Nullable private final HashMap<String, String> headers;
-    private static final Gson gson = new Gson();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Nullable
-    public JsonObject getBodyAsJsonObject() throws JsonSyntaxException {
+    public JsonNode getBodyAsJsonNode() throws JsonProcessingException {
         if (body == null) return null;
-        return gson.fromJson(body, JsonObject.class);
+        return mapper.readTree(body);
     }
 
 }

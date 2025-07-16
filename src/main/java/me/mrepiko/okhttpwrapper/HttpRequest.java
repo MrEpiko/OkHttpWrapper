@@ -16,7 +16,10 @@ limitations under the License.
 
 package me.mrepiko.okhttpwrapper;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ContainerNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.NonNull;
 import okhttp3.MediaType;
@@ -40,7 +43,7 @@ public interface HttpRequest extends Closeable {
     @Nullable
     MediaType getBodyMediaType();
     @Nullable
-    JsonObject getBodyAsJsonObject();
+    JsonNode getBodyAsNode() throws JsonProcessingException;
     @Nullable
     Map<String, String> getHeaders();
     @Nullable
@@ -81,7 +84,7 @@ public interface HttpRequest extends Closeable {
             return this;
         }
 
-        public Builder setBody(@NonNull JsonObject body) {
+        public Builder setBody(@NonNull ContainerNode<?> body) {
             this.body = body.toString();
             return this;
         }

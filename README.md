@@ -8,7 +8,7 @@ A lightweight, fluent wrapper around [OkHttp](https://square.github.io/okhttp/) 
 - Support for global (default) and per-request configuration
 - Easy addition of custom headers, query parameters, and request bodies
 - Synchronous and asynchronous execution methods
-- Built-in JSON parsing support via Gson
+- Built-in JSON parsing support via Jackson
 
 ## 📦 Installation
 
